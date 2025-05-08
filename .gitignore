@@ -1,0 +1,48 @@
+# Arquivos e pastas específicas do projeto
+docs/
+
+# Arquivos de compilação
+bin/
+obj/
+out/
+
+# Arquivos e pastas do Visual Studio / Rider
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Arquivos de banco de dados
+*.mdf
+*.ldf
+*.ndf
+
+# Logs
+*.log
+*.tlog
+
+# Arquivos de build
+_build/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# Docker
+.docker/data/
+
+# Dependências NuGet
+packages/
+*.nupkg
+# Arquivos de projeto NuGet
+project.lock.json
+project.assets.json
+*.nuget.props
+
+# Diversos
+.DS_Store
+Thumbs.db 
