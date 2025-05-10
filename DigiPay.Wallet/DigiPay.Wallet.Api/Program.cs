@@ -96,10 +96,18 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DigiPay Wallet API v1"));
+    app.UseSwaggerUI(c => 
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "DigiPay Wallet API v1");
+        c.RoutePrefix = "swagger";
+        c.DocumentTitle = "DigiPay Wallet API";
+        c.DefaultModelsExpandDepth(-1);
+        c.EnablePersistAuthorization();
+    });
 }
 
 app.UseHttpsRedirection();
+
 app.UseCors("DevPolicy");
 
 app.UseAuthentication();
@@ -107,8 +115,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Inicializar o manipulador de eventos do RabbitMQ 
-// Isso ativa as assinaturas das filas
 app.Services.GetRequiredService<TransactionEventHandler>();
 
 app.Run();

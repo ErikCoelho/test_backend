@@ -2,8 +2,6 @@ using DigiPay.Transaction.Api.Services;
 using DigiPay.Transaction.Api.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
 
 namespace DigiPay.Transaction.Api.Controllers
 {

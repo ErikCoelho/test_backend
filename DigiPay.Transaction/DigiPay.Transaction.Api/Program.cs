@@ -85,7 +85,14 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 app.UseSwagger();
-app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DigiPay Transaction API v1"));
+app.UseSwaggerUI(c => 
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "DigiPay Transaction API v1");
+    c.RoutePrefix = "swagger";
+    c.DocumentTitle = "DigiPay Transaction API";
+    c.DefaultModelsExpandDepth(-1); 
+    c.EnablePersistAuthorization();
+});
 
 app.UseCors("DevPolicy");
 

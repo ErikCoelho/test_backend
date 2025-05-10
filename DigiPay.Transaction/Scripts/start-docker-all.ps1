@@ -1,6 +1,6 @@
 $ErrorActionPreference = "Stop"
 
-Write-Host "Iniciando todo o ambiente DigiPay Wallet no Docker..." -ForegroundColor Cyan
+Write-Host "Iniciando todo o ambiente DigiPay Transaction no Docker..." -ForegroundColor Cyan
 
 # Navegando para o diretório do docker-compose
 Set-Location -Path (Split-Path -Parent $PSScriptRoot)
@@ -41,7 +41,7 @@ $attempts = 0
 $maxAttempts = 30
 while ($attempts -lt $maxAttempts) {
     try {
-        docker exec digipay-wallet-postgres pg_isready > $null
+        docker exec digipay-transaction-postgres pg_isready > $null
         if ($LASTEXITCODE -eq 0) {
             Write-Host "PostgreSQL está pronto!" -ForegroundColor Green
             break
@@ -62,7 +62,7 @@ $attempts = 0
 $maxAttempts = 30
 while ($attempts -lt $maxAttempts) {
     try {
-        $rabbitStatus = docker exec digipay-rabbitmq rabbitmqctl status
+        $rabbitStatus = docker exec digipay-transaction-rabbitmq rabbitmqctl status
         if ($LASTEXITCODE -eq 0) {
             Write-Host "RabbitMQ está pronto!" -ForegroundColor Green
             break
@@ -78,13 +78,10 @@ while ($attempts -lt $maxAttempts) {
 }
 
 # Mostrar logs
-Write-Host "Ambiente DigiPay Wallet está em execução!" -ForegroundColor Green
-Write-Host "PostgreSQL: localhost:5433" -ForegroundColor Cyan
+Write-Host "Ambiente DigiPay Transaction está em execução!" -ForegroundColor Green
+Write-Host "PostgreSQL: localhost:5434" -ForegroundColor Cyan
 Write-Host "RabbitMQ: localhost:5672 (AMQP), localhost:15672 (Management UI)" -ForegroundColor Cyan
-Write-Host "API: http://localhost:5001" -ForegroundColor Cyan
+Write-Host "API: http://localhost:5002" -ForegroundColor Cyan
 Write-Host "As migrações serão aplicadas automaticamente pela aplicação" -ForegroundColor Green
 Write-Host "Para ver os logs, execute: docker-compose logs -f" -ForegroundColor Yellow
-Write-Host "Para parar o ambiente, execute: .\Scripts\stop-docker-all.ps1" -ForegroundColor Yellow
-
-# Retorne ao diretório original
-Set-Location -Path (Split-Path -Parent $PSScriptRoot) 
+Write-Host "Para parar o ambiente, execute: .\Scripts\stop-docker-all.ps1" -ForegroundColor Yellow 

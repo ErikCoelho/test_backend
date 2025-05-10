@@ -11,6 +11,15 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
+# Iniciar RabbitMQ no Docker
+$rabbitmqScript = Join-Path -Path $PSScriptRoot -ChildPath "start-rabbitmq.ps1"
+& $rabbitmqScript
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Falha ao iniciar RabbitMQ. Abortando." -ForegroundColor Red
+    exit 1
+}
+
 # Aplicar migrações ao banco de dados
 Write-Host "Aplicando migrações ao banco de dados..." -ForegroundColor Cyan
 $apiDir = Join-Path -Path $PSScriptRoot -ChildPath "..\DigiPay.Wallet.Api"

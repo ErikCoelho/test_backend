@@ -1,13 +1,13 @@
 services:
   postgres:
     image: postgres:15
-    container_name: digipay-wallet-postgres
+    container_name: digipay-transaction-postgres
     environment:
-      POSTGRES_DB: digipay_wallet
+      POSTGRES_DB: digipay_transaction
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
-      - "5433:5432"
+      - "5434:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     restart: unless-stopped
@@ -21,10 +21,10 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management
-    container_name: digipay-rabbitmq
+    container_name: digipay-transaction-rabbitmq
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - "5673:5672"
+      - "15673:15672"
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
@@ -35,14 +35,14 @@ services:
   api:
     build:
       context: .
-      dockerfile: DigiPay.Wallet.Api/Dockerfile
-    container_name: digipay-wallet-api
+      dockerfile: DigiPay.Transaction.Api/Dockerfile
+    container_name: digipay-transaction-api
     ports:
-      - "5001:80"
+      - "5002:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://*:80
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=digipay_wallet;Username=postgres;Password=postgres;CommandTimeout=120
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=digipay_transaction;Username=postgres;Password=postgres;CommandTimeout=120
       - RabbitMQ__HostName=rabbitmq
       - RabbitMQ__Port=5672
       - RabbitMQ__UserName=guest
@@ -59,7 +59,7 @@ services:
 
 volumes:
   postgres-data:
-    name: digipay-wallet-postgres-data
+    name: digipay-transaction-postgres-data
 
 networks:
   digipay-network:

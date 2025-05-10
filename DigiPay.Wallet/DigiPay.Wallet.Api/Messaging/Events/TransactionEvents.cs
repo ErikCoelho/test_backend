@@ -2,7 +2,6 @@ using System;
 
 namespace DigiPay.Wallet.Api.Messaging.Events
 {
-    // Evento recebido quando uma transferência é solicitada
     public class TransferRequestedEvent
     {
         public Guid TransactionId { get; set; }
@@ -12,11 +11,9 @@ namespace DigiPay.Wallet.Api.Messaging.Events
         public string Description { get; set; }
         public DateTime Timestamp { get; set; }
 
-        // Para desserialização
         public TransferRequestedEvent() { }
     }
 
-    // Evento recebido quando um depósito é solicitado
     public class DepositRequestedEvent
     {
         public Guid TransactionId { get; set; }
@@ -24,11 +21,9 @@ namespace DigiPay.Wallet.Api.Messaging.Events
         public decimal Amount { get; set; }
         public DateTime Timestamp { get; set; }
 
-        // Para desserialização
         public DepositRequestedEvent() { }
     }
 
-    // Evento enviado quando um saldo é atualizado
     public class BalanceUpdatedEvent
     {
         public Guid TransactionId { get; set; }
@@ -49,7 +44,6 @@ namespace DigiPay.Wallet.Api.Messaging.Events
         }
     }
 
-    // Evento recebido quando uma transação é finalizada
     public class TransactionCompletedEvent
     {
         public Guid TransactionId { get; set; }
@@ -57,7 +51,6 @@ namespace DigiPay.Wallet.Api.Messaging.Events
         public string Message { get; set; }
         public DateTime Timestamp { get; set; }
 
-        // Para desserialização
         public TransactionCompletedEvent() { }
     }
 } 
