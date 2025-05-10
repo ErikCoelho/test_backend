@@ -13,31 +13,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-bool useInMemoryDatabase = false;
-try
-{
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    using var connection = new Npgsql.NpgsqlConnection(connectionString);
-    connection.Open();
-    connection.Close();
-}
-catch (Exception)
-{
-    useInMemoryDatabase = true;
-    Console.WriteLine("PostgreSQL connection failed. Using in-memory database instead.");
-}
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
+        npgsqlOptions => npgsqlOptions.EnableRetryOnFailure()));
 
-if (useInMemoryDatabase)
-{
-    builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseInMemoryDatabase("DigiPayAuthDb"));
-}
-else
-{
-    builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
-            npgsqlOptions => npgsqlOptions.EnableRetryOnFailure()));
-}
 
 builder.Services.AddAuthentication(options =>
 {
@@ -57,7 +36,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
         ValidAudience = builder.Configuration["JWT:ValidAudience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"] ?? "DefaultKeyIfNotFound123")),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]!)),
         ClockSkew = TimeSpan.Zero
     };
 });
@@ -138,18 +117,10 @@ using (var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
         
-        if (useInMemoryDatabase)
-        {
-            logger.LogInformation("Using in-memory database. No migrations needed.");
-        }
-        else 
-        {
-            logger.LogInformation("Using PostgreSQL database. Ensuring database is created.");
-            context.Database.EnsureCreated();
-        }
+        context.Database.EnsureCreated();
         
         DbInitializer.Initialize(context);
-        logger.LogInformation("Database initialized successfully.");
+        logger.LogInformation("Auth database initialized successfully.");
     }
     catch (Exception ex)
     {

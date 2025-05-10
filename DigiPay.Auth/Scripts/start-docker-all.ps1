@@ -21,7 +21,7 @@ catch {
 # docker-compose build --no-cache
 
 # Iniciando os containers
-docker-compose up 
+docker-compose up -d
 
 Write-Host "Ambiente DigiPay Auth está em execução!" -ForegroundColor Green
 Write-Host "PostgreSQL: localhost:5432" -ForegroundColor Cyan

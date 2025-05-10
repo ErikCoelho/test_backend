@@ -34,7 +34,7 @@ namespace DigiPay.Auth.Api.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "N7362 - Falha interna no servidor");
-                return new ResultViewModel(false, "N7362 - Falha interna no servidor", null);
+                return new ResultViewModel(false, "N7362 - Falha interna no servidor", string.Empty);
             }
         }
 
